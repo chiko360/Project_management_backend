@@ -1,0 +1,15 @@
+{% extends 'admin/change_list.html' %} {% block object-tools %}
+<div align="center">
+  <form action="set_max_choices/" method="POST">
+    {% csrf_token %}
+    <label for="fname">Max project choices:</label>
+    <input type="number" min="0" name="setMax" />
+    <button type="submit">set max choices</button>
+  </form>
+</div>
+<div align="left">
+  <a class="historylink" href="sort"><button type="button">sort</button></a>
+</div>
+
+<br />
+{{ block.super }} {% endblock %}

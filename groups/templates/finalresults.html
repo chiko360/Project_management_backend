@@ -1,0 +1,21 @@
+{% extends 'admin/base_site.html' %} {% block object-tools %} {% load i18n %}
+<div align="center">
+    <h1> selection results for {{promo}} </h1>
+    <table border=1>
+        <tr>
+            <th>Group</th>
+            <th>Project</th>
+          </tr>
+  {% for result in results %}
+  <tr>
+  <td>
+  {{result.groupfiche}}
+  </td>
+  <td>
+    {{result.selected_project}}
+  </td>
+  </tr>
+  {% endfor %}
+</div>
+
+{{ block.super }} {% endblock %}

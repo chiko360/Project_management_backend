@@ -1,0 +1,9 @@
+{% extends 'admin/base_site.html' %} {% block object-tools %} {% load i18n %}
+<div align="center">
+  <form method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+{{ block.super }} {% endblock %}
