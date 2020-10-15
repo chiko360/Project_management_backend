@@ -221,9 +221,10 @@ class AddToFiche(APIView):
         fiche = FicheDeVoeux()
         fiche.groupfiche = group
         choicelist=[]
-        for key in data:
-            post = Post.objects.get(title=data[key])
-            choicelist.append(post)
+        for key in data['titles']:
+                post = Post.objects.get(title=data[key])
+                choicelist.append(post)
+
         fiche.choices = choicelist
         fiche.my_promo()
         print(fiche)

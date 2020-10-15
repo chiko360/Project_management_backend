@@ -242,3 +242,12 @@ def group_mark(promo):
         return HttpResponse('result')
     else:
         return HttpResponse('result')
+
+def randome1(promo):
+    posts = Post.objects.filter(promo=promo)#######d<1 Probleme 
+    fiches = FicheDeVoeux.objects.filter(promo=promo)
+    for fiche in fiches:
+        choosed_group = random.choice(posts)
+        fiche.selected_project=choosed_group
+        fiche.save()
+    return HttpResponse('result')

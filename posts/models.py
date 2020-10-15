@@ -1,8 +1,11 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from profiles.models import *
+import groups.models
 from notifications.models import sendNotification
 import uuid
+from django.db.models import Q
+
 
 class Post(models.Model):
     
@@ -32,6 +35,12 @@ class Post(models.Model):
             if (orig.approved== False) and (self.approved==True) :
                 title = 'project approuved' 
                 body = "your project "+self.title +" has been approuved by the administration"
+                if self.Student!=None:
+                    grp = self.Student.my_group
+                    fiche = groups.models.FicheDeVoeux.objects.get(groupfiche=grp)
+                    fiche.selected_project=self
+                    fiche.save()
+                    p = Post.objects.filter(Student=self.Student).exclude(title=self.title).delete();
                 if self.user != None :
                     sendNotification(self.user.user,title,body)
                 elif self.Student != None :

@@ -54,10 +54,10 @@ class GroupAdmin(admin.ModelAdmin):
         return HttpResponseRedirect("../")
 
     def full_group(self, group):
-        return (group.member_count() > int(settings.MAXMEMBERS))
+        return (group.member_count() > int(Max.objects.get(id=1).maxMembers))
     
     full_group.boolean = True
-    list_display = ('groupName','leader','full_group')
+    list_display = ('groupName','leader','promo1','full_group')
     #readonly_fields = ('groupName','leader')
     search_fields = ('groupName',)
 
@@ -128,7 +128,7 @@ class FicheAdmin(admin.ModelAdmin):
                     methode = form.cleaned_data.get("method")
                     promo = form.cleaned_data.get("promo")
                     if methode=="random":
-                        randome(promo)
+                        randome1(promo)
                         return HttpResponseRedirect("../results/"+promo)
                     elif methode=="leader mark":
                         leader_mark(promo)
