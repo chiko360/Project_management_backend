@@ -42,9 +42,9 @@ class CreateGr(APIView):
                                 leader.save()
                                 title = grp.groupName + " created"
                                 body = grp.groupName+" has been created succesfully"
-                                channel = 'Groups'
-                                event = 'GroupCreated'
-                                sendNotification(request.user,title,body,channel,event)
+                                
+                                
+                                sendNotification(request.user,title,body)
                                 return JsonResponse({"note":"Group Succesfuly Created",
                                         "status":"succes"},status=status.HTTP_200_OK)
                         else:
@@ -98,9 +98,9 @@ class Invitation(APIView):
                         Invitations.delete() 
                         title = grp.groupName
                         body = 'you have been added to '+ grp.groupName
-                        channel = 'Groups'
-                        event = 'added'
-                        sendNotification(student.user,title,body,channel,event)  
+                        
+                        
+                        sendNotification(student.user,title,body)  
                         return JsonResponse({"note":"Member added"},status=200,safe=False)
                     else:
                         Invitations = Invite.objects.filter(member=student,grp=grp)
@@ -143,9 +143,9 @@ class invite(APIView):
                     i.save()
                     title = grp.groupName
                     body = leader.__str__() + 'invited you to join his groupe '+ grp.groupName
-                    channel = 'Groups'
-                    event = 'invited'
-                    sendNotification(student.user,title,body,channel,event)  
+                    
+                    
+                    sendNotification(student.user,title,body)  
                     return JsonResponse({"note":"invitation sent"},status=200,safe=False)
                 else:
                     return JsonResponse({"note":"This student is not availaible"})
@@ -161,11 +161,11 @@ class DeleteGroup(APIView):
         grp.delete()
         title = 'your group was deleted succesfuly'
         body = 'your group was deleted by ' + leader.__str__()
-        channel = 'Groups'
-        event = 'GroupDeleted'
+        
+        
         for member in members :
             member.have_group=False
-            sendNotification(member,title,body,channel,event)
+            sendNotification(member,title,body)
         return JsonResponse({"Note":"Group Deleted"},status=200,safe=False)
 
 
@@ -186,16 +186,23 @@ class DeleteMember(APIView):
                             student=None
                         MyGroupmembers=grp.all_members()
                         if student:
-                                if  student in MyGroupmembers:
+                                if student==leader:
+                                    grp.delete()
+                                    student.have_group=False
+                                    student.save()
+                                    student.my_group=None
+                                    student.save()
+
+                                elif  student in MyGroupmembers:
                                         student.have_group=False
                                         student.save()
                                         student.my_group=None
                                         student.save()
                                         title = grp.groupName
                                         body = 'you have been kicked from '+ grp.groupName
-                                        channel = 'Groups'
-                                        event = 'kicked'
-                                        sendNotification(student.user,title,body,channel,event)                        
+                                        
+                                        
+                                        sendNotification(student.user,title,body)                        
                                         return JsonResponse({"note":"Student Deleted"},status=200,safe=False)
                                 else:
                                         return JsonResponse({"note":"This student is not in your group"})
@@ -210,10 +217,8 @@ class AddToFiche(APIView):
     def post(self, request):
         data = request.data
         student = StudentProfile.objects.get(user=request.user)
-        print(student)
         group = Group.objects.get(leader=student)
         fiche = FicheDeVoeux()
-        print(group)
         fiche.groupfiche = group
         choicelist=[]
         for key in data:
@@ -233,7 +238,7 @@ class lookupposts(APIView):
         promo_leader=leader.promo
         query=Post.objects.filter(promo=promo_leader)
         availaible=query.filter(title__startswith = name)
-        Serailizer=availaible_students(availaible,many=True)
+        Serailizer=availaible_posts(availaible,many=True)
         return JsonResponse(Serailizer.data,status=200,safe=False)
 
     
@@ -267,11 +272,39 @@ class AddToFiche3CS(APIView):
 class finalResult(APIView):
     permissions_classes = [] #ResultasFinal
     def get(self,request):
-        user=StudentProfile.objects.get(user=request.user)
-        promo=user.promo
-        fiches=FicheDeVoeux.objects.filter(promo=promo)
+        fiches=FicheDeVoeux.objects.all()
         serializer=finalResults(fiches,many=True)
         return JsonResponse(serializer.data,status=200,safe=False)
+
+
+
+class GrpMembers(APIView): #Groupment
+    def post(self, request):
+        student = TeacherProfile.objects.get(user=request.user)
+        serializer=GroupName(data=request.data)
+        if serializer.is_valid():
+                groupName = serializer.data["grp"]
+                grp=Group.objects.get(groupName=groupName)
+                members = grp.all_members()
+                serializer= grpmembers(members, many=True)
+                return JsonResponse(serializer.data,status=200,safe=False)
+        else:
+            return JsonResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class getMax(APIView):
+    permissions_classes = [] #ResultasFinal
+    def get(self,request):
+        maxChoices = Max.objects.get(id=1).maxChoices
+        maxMembers = Max.objects.get(id=1).maxMembers
+        return JsonResponse({'maxC':maxChoices,'maxM':maxMembers},status=200,safe=False)
+
+
+
+
+
+
 
 
 

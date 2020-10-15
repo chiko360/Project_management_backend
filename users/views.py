@@ -74,9 +74,9 @@ class ChangePwView(generics.UpdateAPIView):
                 self.object.save()
                 title = 'password changed'
                 body = 'your password has been changed succesfully'
-                channel = 'users'
-                event = 'chgpass'
-                sendNotification(self.object,title,body,channel,event)  
+                
+                
+                sendNotification(self.object,title,body)  
                 response = {
                     'status': 'success',
                     'code': status.HTTP_200_OK,

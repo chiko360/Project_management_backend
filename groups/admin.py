@@ -48,9 +48,9 @@ class GroupAdmin(admin.ModelAdmin):
         
         title = 'Group max member limit changed'
         body = 'the group max members limit changed to '+ str(query) 
-        channel = 'Groups'
-        event = 'MaxMembers'
-        sendNotification(request.user,title,body,channel,event) 
+        
+        
+        sendNotification(request.user,title,body) 
         return HttpResponseRedirect("../")
 
     def full_group(self, group):
@@ -110,9 +110,9 @@ class FicheAdmin(admin.ModelAdmin):
         obj.save()
         title = 'Max choices in fiche de voeux changed'
         body = 'the Max choices in fiche de voeux changed changed to '+ str(query) 
-        channel = 'Groups'
-        event = 'MaxChoices'
-        sendNotification(request.user,title,body,channel,event) 
+        
+        
+        sendNotification(request.user,title,body) 
         return HttpResponseRedirect("../")
     
     def tirage_au_sort(self, request):

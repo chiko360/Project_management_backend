@@ -8,7 +8,6 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .models import *
 from rest_framework.renderers import TemplateHTMLRenderer
 from django.shortcuts import render
-import pusher
 from django.views.generic import TemplateView
 from .serializer import HaveGroup
 

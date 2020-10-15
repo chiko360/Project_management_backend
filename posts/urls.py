@@ -8,7 +8,7 @@ urlpatterns = [
 	path('edit/<int:id>/',PostToEditView.as_view()), ##### /something ######## edited
 
 	path("createpost/student/",createPostStudent.as_view()),	#### createpost for student
-	path("studentprojects/",MyPostsStudent.as_view()),          #### My posts as Student
+	path("studentprojects/",PostStudent.as_view()),          #### My posts as Student
 	path('',PostListView.as_view(),name='list_posts'),#### list projects for student
 	url(r'^(?P<title>[\w-]+)/$',PostDetailAPIView.as_view(),name='detail_posts'),
 

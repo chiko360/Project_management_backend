@@ -23,7 +23,7 @@ from session.permissions import DepotDeProjet,ValidationDesProjet,ChoixDesProjet
 
 
 #class PostListView3CS(APIView):
-class MyPostsStudent(APIView):
+class PostStudent(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
     def  get(self,request):
@@ -58,9 +58,9 @@ class createPostStudent(APIView):
                             post.save()
                             #title = 'project added' 
                             #body = "your project has been submitted to the administration for revision"
-                            #channel = 'projects'
-                            #event = 'projectcreated'
-                            #sendNotification(request.user,title,body,channel,event)
+                            #
+                            #
+                            #sendNotification(request.user,title,body)
                             return JsonResponse({"note":"Post Succesfuly Created",
                                     "status":"succes"},status=status.HTTP_200_OK)
                     else:
@@ -81,9 +81,9 @@ class UpdatePostStudent(APIView):
                             serializer.save()
                             title = q.__str__()
                             body = q.__str__() +" has been updated succesfully"
-                            channel = 'projects'
-                            event = 'projectupdated'
-                            sendNotification(request.user,title,body,channel,event)
+                            
+                            
+                            sendNotification(request.user,title,body)
                             return JsonResponse({"note":"Post Succesfuly UPDATED",
                                     "note":"Post Succesfuly UPDATED"},status=status.HTTP_200_OK)
                         else:
@@ -106,9 +106,9 @@ class DeletePostStudent(APIView):
                         q.delete()
                         title = 'project deleted'
                         body = "your project has been deleted succesfully"
-                        channel = 'projects'
-                        event = 'projectdeletedted'
-                        sendNotification(request.user,title,body,channel,event)
+                        
+                        
+                        sendNotification(request.user,title,body)
                         return JsonResponse({'success': 'True',
                                 'Note':'Post succesfully deleted !'}, status = status.HTTP_200_OK)
                     else: return JsonResponse({'note':'This post does not belong to you'},status=status.HTTP_404_NOT_FOUND)
@@ -131,9 +131,9 @@ def PostUpdate(request,pk):
                         serializer.save()
                         title = q.__str__()
                         body = q.__str__() +" has been updated succesfully"
-                        channel = 'projects'
-                        event = 'projectupdated'
-                        sendNotification(request.user,title,body,channel,event)
+                        
+                        
+                        sendNotification(request.user,title,body)
                         return JsonResponse({"note":"Post Succesfuly UPDATED",
                                 "note":"Post Succesfuly UPDATED"},status=status.HTTP_200_OK)
                     else:
@@ -156,9 +156,9 @@ def PostDelete(request,pk):
                     q.delete()
                     title = 'project deleted'
                     body = "your project has been deleted succesfully"
-                    channel = 'projects'
-                    event = 'projectdeletedted'
-                    sendNotification(request.user,title,body,channel,event)
+                    
+                    
+                    sendNotification(request.user,title,body)
                     return JsonResponse({'success': 'True',
                             'Note':'Post succesfully deleted !'}, status = status.HTTP_200_OK)
                 else: return JsonResponse({'note':'This post does not belong to you'},status=status.HTTP_404_NOT_FOUND)
@@ -227,9 +227,9 @@ def create(request):
                     post.save()
                     title = 'project added' 
                     body = "your project has been submitted to the administration for revision"
-                    channel = 'projects'
-                    event = 'projectcreated'
-                    sendNotification(request.user,title,body,channel,event)
+                    
+                    
+                    sendNotification(request.user,title,body)
                     return JsonResponse({"note":"Post Succesfuly Created",
                             "status":"succes"},status=status.HTTP_200_OK)
             else:

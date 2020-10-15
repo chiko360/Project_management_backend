@@ -36,8 +36,6 @@ class Group(models.Model):
          self.promo1=self.leader.promo
 
 
-
-
 class FicheDeVoeux(models.Model):
     choices = PickledObjectField()
     groupfiche=models.OneToOneField(Group,on_delete=models.SET_NULL,blank=True, null=True)
@@ -48,27 +46,14 @@ class FicheDeVoeux(models.Model):
         self.promo=self.groupfiche.leader.promo
 
     def __str__(self):
-        return self.groupfiche.groupName
-
-#class Fiche5eme(models.Model):
-#
-#    choices = PickledObjectField()
-#    groupfiche=models.OneToOneField(Group,on_delete=models.CASCADE,blank=True, null=True)
-#    limit = models.Q(app_label = 'posts', model = 'post') | models.Q(app_label = 'posts', model = 'studentpost')
-#    #content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE, related_name="selected",null=True)
-#
-#    content_type = models.ForeignKey(ContentType, limit_choices_to = limit,on_delete=models.CASCADE, related_name="selected",null=True)
-#    object_id = models.PositiveIntegerField()
-#    selected_project = GenericForeignKey('content_type', 'object_id')
-
-
-#    def __str__(self):
-#        return self.groupfiche.groupName
+        if self.groupfiche!=None:
+            return self.groupfiche.groupName
+        else :return 'no name';
 
 class Invite(models.Model):
     grp = models.ForeignKey(Group,on_delete=models.CASCADE,blank=True, null=True)
-    member = models.ForeignKey("profiles.StudentProfile", on_delete=models.CASCADE,related_name='invited_member',null=True)
-    accepted = models.NullBooleanField()
+    member = models.ForeignKey("profiles.StudentProfile", on_delete=models.SET_NULL,related_name='invited_member',null=True)
+    accepted = models.BooleanField(null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
